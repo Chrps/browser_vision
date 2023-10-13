@@ -16,4 +16,10 @@ module.exports = {
     "no-console": process.env.NODE_ENV === "production" ? "warn" : "off",
     "no-debugger": process.env.NODE_ENV === "production" ? "warn" : "off",
   },
+  // Add the following settings for auto linting on save
+  settings: {
+    "editor.codeActionsOnSave": {
+      "source.fixAll.eslint": true,
+    },
+  },
 };

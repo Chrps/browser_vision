@@ -1,27 +1,31 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png" />
-  <HelloWorld msg="Welcome to Your Vue.js + TypeScript App" />
+  <div id="app" class="app-container">
+    <Sidebar></Sidebar>
+    <div class="main-content">
+      <router-view></router-view>
+    </div>
+  </div>
 </template>
 
-<script lang="ts">
-import { Options, Vue } from "vue-class-component";
-import HelloWorld from "./components/HelloWorld.vue";
+<script>
+import { defineComponent } from "vue";
+import Sidebar from "@/components/SideBar.vue";
 
-@Options({
+export default defineComponent({
   components: {
-    HelloWorld,
+    Sidebar,
   },
-})
-export default class App extends Vue {}
+});
 </script>
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+<style scoped>
+.app-container {
+  display: flex;
+  align-items: flex-start; /* Adjust vertical alignment as needed */
+}
+
+.main-content {
+  flex: 1; /* Take up remaining available space */
+  padding: 20px; /* Add padding to the content area */
 }
 </style>
