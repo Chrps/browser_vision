@@ -1,2 +1,0 @@
-"use strict";(self["webpackChunkbrowser_vision"]=self["webpackChunkbrowser_vision"]||[]).push([[413],{8413:function(e,n,r){r.r(n),r.d(n,{default:function(){return a}});var o=r(6252);const t=(0,o._)("h1",null,"Welcome to the Home View",-1),u=[t];function i(e,n){return(0,o.wg)(),(0,o.iD)("div",null,u)}var s=r(3744);const c={},l=(0,s.Z)(c,[["render",i]]);var a=l}}]);
-//# sourceMappingURL=413.5dedd992.js.map
