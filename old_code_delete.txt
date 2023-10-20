@@ -1,0 +1,94 @@
+<!-- <script>
+import { defineComponent, onMounted, onMounted } from "vue";
+import cv, { Mat, Rect } from "opencv-ts";
+
+export default defineComponent({
+  data() {
+    return {
+      imageSrc: null,
+      src: null, // Store the OpenCV image
+      isOpenCVReady: false, // Flag to track OpenCV readiness
+    };
+  },
+  methods: {
+    uploadImage(e) {
+      const file = e.target.files[0];
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = (e) => {
+        const imgElement = new Image();
+        imgElement.src = e.target.result;
+        imgElement.onload = () => {
+          const mat = cv.imread(imgElement);
+          cv.imshow("imageCanvas", mat);
+          // this.imageSrc = imgElement.src;
+        };
+
+        cv.imread(this.previewImage);
+      };
+    },
+    // handleFileSelect(event) {
+    //   const file = event.target.files[0];
+    //   if (file) {
+    //     this.loadImage(file);
+    //   }
+    // },
+    // loadImage(file) {
+    //   debugger;
+    //   try {
+    //     if (!this.isOpenCVReady) {
+    //       // OpenCV.js is not ready, handle this case
+    //       console.error("OpenCV.js not loaded.");
+    //       return;
+    //     }
+
+    //     const reader = new FileReader();
+    //     reader.readAsDataURL(file);
+    //     reader.onload = (e) => {
+    //       if (this.src) {
+    //         this.src.delete(); // Release the previous image
+    //       }
+    //       const imgElement = new Image();
+    //       imgElement.src = e.target.result;
+    //       imgElement.onload = () => {
+    //         this.src = cv.imread(imgElement); // Load the image using OpenCV.js
+
+    //         // Apply your OpenCV.js image processing logic here
+    //         // Example: cv.cvtColor(this.src, this.src, cv.COLOR_BGR2GRAY);
+
+    //         cv.imshow("imageCanvas", this.src);
+    //         this.imageSrc = imgElement.src;
+    //       };
+    //     };
+    //   } catch (error) {
+    //     console.log(error);
+    //   }
+    // },
+    dragEnter(event) {
+      event.preventDefault();
+    },
+    dragOver(event) {
+      event.preventDefault();
+    },
+    dragLeave(event) {
+      event.preventDefault();
+    },
+    handleDrop(event) {
+      event.preventDefault();
+      const file = event.dataTransfer.files[0];
+      if (file) {
+        this.loadImage(file);
+      }
+    },
+    openFileInput() {
+      const fileInput = document.getElementById("imageInput");
+      fileInput.click();
+    },
+  },
+  mounted() {
+    cv.onRuntimeInitialized = () => {
+      this.isOpenCVReady = true;
+    };
+  },
+});
+</script> -->

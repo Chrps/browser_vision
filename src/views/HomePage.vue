@@ -6,8 +6,10 @@
   </div>
 </template>
 
-<script>
-export default {
-  // Component logic for the Home view
-};
-</script>
+<script script setup lang="ts"></script>
+
+<style>
+body {
+  margin: 0; /* Remove the default margin */
+}
+</style>

@@ -1,5 +1,15 @@
 # browser-vision
 
+## TODO
+- [ ] Check that supported image formats are actually supported
+
+## Setup version
+TODO: Improve this section
+
+```
+nvm use default
+```
+
 ## Project setup
 ```
 npm install

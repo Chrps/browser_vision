@@ -2,7 +2,11 @@
   <div id="app" class="app-container">
     <Sidebar></Sidebar>
     <div class="main-content">
-      <router-view></router-view>
+      <router-view v-slot="{ Component }">
+        <keep-alive>
+          <component :is="Component" />
+        </keep-alive>
+      </router-view>
     </div>
   </div>
 </template>
@@ -19,13 +23,25 @@ export default defineComponent({
 </script>
 
 <style scoped>
+body,
+html {
+  background: linear-gradient(
+    to bottom,
+    #00c71e,
+    #00c71e5b
+  ); /* Soft green gradient background */
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
 .app-container {
   display: flex;
-  align-items: flex-start; /* Adjust vertical alignment as needed */
 }
 
 .main-content {
-  flex: 1; /* Take up remaining available space */
-  padding: 20px; /* Add padding to the content area */
+  flex: 1;
+  padding: 20px;
+  margin-left: 100px;
 }
 </style>
