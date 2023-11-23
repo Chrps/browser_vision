@@ -1,8 +1,7 @@
 <!-- views/Home.vue -->
 <template>
   <div>
-    <h1>Welcome to the Home View</h1>
-    <!-- Add content for the Home view here -->
+    <h1 style="text-align: center">Welcome to the Home View</h1>
   </div>
 </template>
 

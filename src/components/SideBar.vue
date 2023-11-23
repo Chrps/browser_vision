@@ -1,9 +1,17 @@
 <template>
   <div class="sidebar">
     <button class="sidebar-button" @click="navigateTo('/')">Home</button>
-    <button class="sidebar-button" @click="navigateTo('/image')">Image</button>
     <button class="sidebar-button" @click="navigateTo('/image_convert')">
-      Image Convert
+      Image<br />Convert
+    </button>
+    <button class="sidebar-button" @click="navigateTo('/image_resize')">
+      Image<br />Resize
+    </button>
+    <button class="sidebar-button" @click="navigateTo('/image_blur')">
+      Image<br />Blur
+    </button>
+    <button class="sidebar-button" @click="navigateTo('/canny_edge_detection')">
+      Canny<br />Edge<br />Detection
     </button>
   </div>
 </template>
@@ -18,26 +26,28 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss">
+@import "@/assets/styles/pallet.scss";
+
 .sidebar {
-  position: fixed; /* Set the position to fixed */
-  top: 0; /* Lock it to the top of the viewport */
-  left: 0; /* Lock it to the left side */
+  position: fixed;
+  top: 0;
+  left: 0;
   display: flex;
   flex-direction: column;
   height: 100vh;
   width: 100px;
-  background-color: #262c27;
+  background-color: var(--dark-secondary);
   align-items: center;
-  margin: 0; /* Remove the margin around the sidebar */
+  margin: 0;
 }
 
 .sidebar-button {
   width: 100px;
   height: 100px;
-  padding-bottom: 100px; /* Maintain a 1:1 aspect ratio (height = width) */
-  background-color: #e8f5e9;
-  color: #4caf50;
+  padding-bottom: 100px;
+  background-color: var(--dark-secondary);
+  color: var(--text-color);
   border: none;
   cursor: pointer;
   transition: background-color 0.3s ease;
@@ -45,11 +55,11 @@ export default {
   align-items: center;
   font-weight: bold;
   text-align: center;
-  font-size: 1.5em;
+  font-size: 1em;
   padding: 0;
 }
 
 .sidebar-button:hover {
-  background-color: #c8e6c9;
+  background-color: var(--light-secondary);
 }
 </style>

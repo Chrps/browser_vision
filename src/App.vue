@@ -22,17 +22,21 @@ export default defineComponent({
 });
 </script>
 
-<style scoped>
-body,
-html {
-  background: linear-gradient(
-    to bottom,
-    #00c71e,
-    #00c71e5b
-  ); /* Soft green gradient background */
-  margin: 0;
-  padding: 0;
-  height: 100%;
+<style lang="scss">
+@import "@/assets/styles/pallet.scss";
+
+#app {
+  //background: linear-gradient(
+  //  to bottom,
+  //  var(--hunter-green),
+  //  var(--dark-green)
+  //);
+  background: var(--dark-primary);
+  font-family: "Roboto", sans-serif;
+  color: var(--text-color);
+  height: 100vh;
+  width: 100vw;
+  overflow: auto;
 }
 
 .app-container {
