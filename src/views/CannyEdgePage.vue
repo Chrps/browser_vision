@@ -18,38 +18,40 @@
         :modelValue="threshold2"
         @update:modelValue="handleNumberInputChange('Threshold 2', $event)"
       />
-      <button @click="toggleFixedWidth">Toggle Fixed Width</button>
     </div>
     <ImageGrid
       :images="images"
       :margin="10"
       :rows="1"
-      :fixedWidth="isFixedWidth ? calculateFixedWidth() : 0"
+      :fixedWidth="isFixedWidth ? fixedWidth : 0"
     />
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, watch, computed } from "vue";
 import MediaInput from "@/components/MediaInput.vue";
 import ImageGrid from "@/components/ImageGrid.vue";
 import NumberInput from "@/components/NumberInput.vue";
-import { cannyEdge } from "@/cv_methods/opencvCannyEdge";
-import {
-  convertImageToMat,
-  convertMatToImage,
-} from "@/cv_methods/opencvBridge";
-import cv, { Mat } from "opencv-ts";
+import { cannyEdge } from "@/cv_methods/cannyEdgeDetection";
+import { convertImageToMat, convertMatToImage } from "@/cv_methods/bridge";
+import { Mat } from "opencv-ts";
+import { useStore } from "vuex";
+const store = useStore();
 
 const uploadedImage = ref<HTMLImageElement | null>(null);
 const outputImage = ref<HTMLImageElement | null>(null);
 const images = ref<(HTMLImageElement | null)[]>([]);
 const threshold1 = ref<number | undefined>(50);
 const threshold2 = ref<number | undefined>(100);
-const isFixedWidth = ref(false);
+const isFixedWidth = computed(() => store.state.isFixedWidth);
+const fixedWidth = computed(() => store.state.fixedWidth);
 
 // Function to handle image resizing
 const handle = () => {
+  if (uploadedImage.value === null) {
+    return;
+  }
   let mat = convertImageToMat(uploadedImage.value);
   mat = cannyEdge(
     mat as Mat,
@@ -62,8 +64,25 @@ const handle = () => {
   if (outputImage.value === null) {
     return;
   }
-  images.value = [uploadedImage.value, outputImage.value];
+  setImageGrid();
 };
+
+const setImageGrid = () => {
+  if (store.state.showInputImage) {
+    images.value = [uploadedImage.value, outputImage.value];
+  } else {
+    images.value = [outputImage.value];
+  }
+};
+
+watch(
+  () => store.state.showInputImage,
+  (newValue, oldValue) => {
+    if (newValue !== oldValue) {
+      setImageGrid();
+    }
+  }
+);
 
 const handleNumberInputChange = (title: string, value: number) => {
   if (title === "Threshold 1") {
@@ -78,18 +97,7 @@ const handleNumberInputChange = (title: string, value: number) => {
 const handleImageUploaded = (imgElement: HTMLImageElement) => {
   console.log("image uploaded: ", imgElement);
   uploadedImage.value = imgElement;
-  images.value = [uploadedImage.value];
   handle();
-};
-
-const calculateFixedWidth = () => {
-  // Calculate 40% of the area where it is displayed
-  const area = window.innerWidth * window.innerHeight;
-  return 0.6 * Math.sqrt(area); // Adjust the ratio or formula as needed
-};
-
-const toggleFixedWidth = () => {
-  isFixedWidth.value = !isFixedWidth.value;
 };
 </script>
 
@@ -97,7 +105,7 @@ const toggleFixedWidth = () => {
 @import "@/assets/styles/pallet.scss";
 
 body {
-  margin: 0; /* Remove the default margin */
+  margin: 0;
 }
 
 .input-row {

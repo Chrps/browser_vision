@@ -23,32 +23,40 @@
         :modelValue="resize_height"
         @update:modelValue="handleSizeChange('Height', $event)"
       />
-      <button @click="toggleFixedWidth">Toggle Fixed Width</button>
+      <div class="checkbox">
+        <label for="keep-aspect-ratio" class="checkbox-label">
+          Keep Aspect Ratio
+          <input
+            type="checkbox"
+            id="keep-aspect-ratio"
+            v-model="keepAspectRatio"
+          />
+        </label>
+      </div>
     </div>
     <ImageGrid
       :images="images"
       :margin="10"
       :rows="1"
-      :fixedWidth="isFixedWidth ? calculateFixedWidth() : 0"
+      :fixedWidth="isFixedWidth ? fixedWidth : 0"
     />
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import MediaInput from "@/components/MediaInput.vue";
 import ImageGrid from "@/components/ImageGrid.vue";
 import OptionInput from "@/components/OptionInput.vue";
 import NumberInput from "@/components/NumberInput.vue";
-import { resizeImage } from "@/cv_methods/opencvResize";
+import { resizeImage } from "@/cv_methods/resize";
 import {
   getInterpolationFromLabel,
   getInterpolationLabels,
-} from "@/cv_methods/opencvGetInterpolation";
-import {
-  convertImageToMat,
-  convertMatToImage,
-} from "@/cv_methods/opencvBridge";
+} from "@/cv_methods/interpolationTypes";
+import { convertImageToMat, convertMatToImage } from "@/cv_methods/bridge";
+import { useStore } from "vuex";
+const store = useStore();
 
 const uploadedImage = ref<HTMLImageElement | null>(null);
 const outputImage = ref<HTMLImageElement | null>(null);
@@ -56,18 +64,18 @@ const images = ref<(HTMLImageElement | null)[]>([]);
 const selectedInterpolation = ref<number | null>(null);
 const resize_width = ref<number | undefined>(undefined);
 const resize_height = ref<number | undefined>(undefined);
-const isFixedWidth = ref(false);
+const isFixedWidth = computed(() => store.state.isFixedWidth);
+const fixedWidth = computed(() => store.state.fixedWidth);
+const keepAspectRatio = ref(false);
 
 selectedInterpolation.value = 0; // Hack
 const selectOptions = getInterpolationLabels();
 
 // Function to handle image resizing
-const handleImageResize = () => {
-  if (uploadedImage.value === null) return;
-  if (selectedInterpolation.value === null) return;
-  if (resize_width.value === null) return;
-  if (resize_height.value === null) return;
-
+const handle = () => {
+  if (uploadedImage.value === null) {
+    return;
+  }
   let mat = convertImageToMat(uploadedImage.value);
   mat = resizeImage(
     mat,
@@ -85,24 +93,34 @@ const handleImageResize = () => {
 };
 
 const handleOptionSelected = (selectedLabel: string) => {
-  console.log("option selected: ", selectedLabel);
   const selectedOption = getInterpolationFromLabel(selectedLabel);
-  console.log("selected option: ", selectedOption);
   if (selectedOption) {
-    console.log("selected option: ", selectedOption);
     selectedInterpolation.value = selectedOption;
-    handleImageResize();
+    handle();
   }
 };
 
 const handleSizeChange = (title: string, value: number) => {
-  console.log("size changed: ", value, "title: ", title);
   if (title === "Width") {
     resize_width.value = value;
+    if (keepAspectRatio.value && uploadedImage.value) {
+      // If keep aspect ratio is enabled, calculate and update the height
+      resize_height.value = Math.round(
+        (value / uploadedImage.value.width) * uploadedImage.value.height
+      );
+    }
   } else if (title === "Height") {
     resize_height.value = value;
+    if (keepAspectRatio.value && uploadedImage.value) {
+      // If keep aspect ratio is enabled, calculate and update the width
+      resize_width.value = Math.round(
+        (value / uploadedImage.value.height) * uploadedImage.value.width
+      );
+    }
   }
-  handleImageResize();
+
+  // Trigger the handle function to apply changes
+  handle();
 };
 
 // Handle the custom event when the image is uploaded
@@ -114,17 +132,7 @@ const handleImageUploaded = (imgElement: HTMLImageElement) => {
   resize_width.value = uploadedImage.value.width;
   resize_height.value = uploadedImage.value.height;
 
-  handleImageResize();
-};
-
-const calculateFixedWidth = () => {
-  // Calculate 40% of the area where it is displayed
-  const area = window.innerWidth * window.innerHeight;
-  return 0.6 * Math.sqrt(area); // Adjust the ratio or formula as needed
-};
-
-const toggleFixedWidth = () => {
-  isFixedWidth.value = !isFixedWidth.value;
+  handle();
 };
 </script>
 
@@ -137,5 +145,24 @@ body {
 
 .input-row {
   display: flex;
+}
+
+.checkbox {
+  flex-direction: column;
+  align-items: center;
+  bottom: 0;
+  margin: 10px;
+}
+
+.checkbox input {
+  width: 15px;
+  height: 15px;
+}
+
+.checkbox-label {
+  font-size: 1em;
+  font-weight: bold;
+  align-items: center;
+  text-align: center;
 }
 </style>

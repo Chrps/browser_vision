@@ -12,12 +12,9 @@
 import { ref } from "vue";
 import MediaInput from "@/components/MediaInput.vue";
 import ImageGrid from "@/components/ImageGrid.vue";
-import { splitChannels } from "@/cv_methods/opencvChannels";
-import { convertToGray } from "@/cv_methods/opencvColorCvt";
-import {
-  convertImageToMat,
-  convertMatToImage,
-} from "@/cv_methods/opencvBridge";
+import { splitChannels } from "@/cv_methods/channels";
+import { convertToGray } from "@/cv_methods/colorCvt";
+import { convertImageToMat, convertMatToImage } from "@/cv_methods/bridge";
 
 const uploadedImage = ref<HTMLImageElement | null>(null);
 const outputImage = ref<HTMLImageElement | null>(null);
@@ -35,8 +32,7 @@ const handleImageUploaded = (imgElement: HTMLImageElement) => {
   // Convert the image to grayscale
   mat = convertToGray(mat);
   const outputImageElement = convertMatToImage(mat);
-  console.log(outputImageElement);
-  console.log(mat);
+
   outputImage.value = outputImageElement;
 
   if (outputImage.value === null) {

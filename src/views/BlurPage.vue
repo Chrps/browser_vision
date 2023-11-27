@@ -23,33 +23,31 @@
         @update:xValue="handlePointChange('anchor_x', $event)"
         @update:yValue="handlePointChange('anchor_y', $event)"
       />
-      <button @click="toggleFixedWidth">Toggle Fixed Width</button>
     </div>
     <ImageGrid
       :images="images"
       :margin="10"
       :rows="1"
-      :fixedWidth="isFixedWidth ? calculateFixedWidth() : 0"
+      :fixedWidth="isFixedWidth ? fixedWidth : 0"
     />
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import MediaInput from "@/components/MediaInput.vue";
 import ImageGrid from "@/components/ImageGrid.vue";
 import OptionInput from "@/components/OptionInput.vue";
 import PointInput from "@/components/PointInput.vue";
-import { blurImage } from "@/cv_methods/opencvBlur";
+import { blurImage } from "@/cv_methods/blur";
 import {
   getBorderTypeFromLabel,
   getBorderTypeLabels,
-} from "@/cv_methods/opencvGetBorderType";
-import {
-  convertImageToMat,
-  convertMatToImage,
-} from "@/cv_methods/opencvBridge";
+} from "@/cv_methods/borderTypes";
+import { convertImageToMat, convertMatToImage } from "@/cv_methods/bridge";
 import cv, { Mat } from "opencv-ts";
+import { useStore } from "vuex";
+const store = useStore();
 
 const uploadedImage = ref<HTMLImageElement | null>(null);
 const outputImage = ref<HTMLImageElement | null>(null);
@@ -59,12 +57,16 @@ const ksize_x = ref<number | undefined>(5);
 const ksize_y = ref<number | undefined>(5);
 const anchor_x = ref<number | undefined>(-1);
 const anchor_y = ref<number | undefined>(-1);
-const isFixedWidth = ref(false);
+const isFixedWidth = computed(() => store.state.isFixedWidth);
+const fixedWidth = computed(() => store.state.fixedWidth);
 
 selectedBorderType.value = 1; // Hack
 const selectOptions = getBorderTypeLabels();
 
 const handle = () => {
+  if (uploadedImage.value === null) {
+    return;
+  }
   const ksize = new cv.Size(ksize_x.value as number, ksize_y.value as number);
   const anchor = new cv.Point(
     anchor_x.value as number,
@@ -121,16 +123,6 @@ const handleImageUploaded = (imgElement: HTMLImageElement) => {
   uploadedImage.value = imgElement;
   images.value = [uploadedImage.value];
   handle();
-};
-
-const calculateFixedWidth = () => {
-  // Calculate 40% of the area where it is displayed
-  const area = window.innerWidth * window.innerHeight;
-  return 0.6 * Math.sqrt(area); // Adjust the ratio or formula as needed
-};
-
-const toggleFixedWidth = () => {
-  isFixedWidth.value = !isFixedWidth.value;
 };
 </script>
 

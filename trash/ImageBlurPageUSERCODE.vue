@@ -20,11 +20,11 @@ import cv, { Mat } from "opencv-ts";
 import MediaInput from "@/components/MediaInput.vue";
 import ImageGrid from "@/components/ImageGrid.vue";
 import userCodeInput from "@/components/userCodeInput.vue";
-import { userCode } from "@/cv_methods/opencvBlur";
+import { userCode } from "@/cv_methods/blur";
 import {
   convertImageToMat,
   convertMatToImage,
-} from "@/cv_methods/opencvBridge";
+} from "@/cv_methods/bridge";
 
 const uploadedImage = ref<HTMLImageElement | null>(null);
 const outputImage = ref<HTMLImageElement | null>(null);

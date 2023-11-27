@@ -8,9 +8,20 @@ https://chrps.github.io/browser_vision
 - [X] Add abillity to add limits to NumberInput.vue
 - [ ] Provide message when invalid NumberInput.vue value is entered
 - [X] Add shared color palette
-- [ ] Add interpolation method to resize
+- [X] Add interpolation method to resize
 - [ ] Create common media input component
-
+    - [ ] Add video input
+    - [X] Remove url input sinde CORS will never be allowed with client side only
+- [X] Add toggle for show input image to sidebar
+- [X] Add toggle for "fixed width" to sidebar (fixed size)
+- [X] Figure out how to use cv constants
+- [ ] Serve on github pages
+- [ ] Create info icon
+- [ ] Change to use regular opencv-js
+- [X] resize keep aspect ratio
+- [ ] Make a page template(component)
+- [ ] Impliment mat input output as opencv has described
+- [ ] Max value not working in thresholding
 ## Setup version
 TODO: Improve this section
 

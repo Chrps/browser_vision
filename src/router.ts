@@ -7,24 +7,29 @@ const routes: Array<RouteRecordRaw> = [
     component: () => import("./views/HomePage.vue"),
   },
   {
-    path: "/image_convert",
+    path: "/convert",
     name: "ImageConvert",
-    component: () => import("./views/ImageConvertPage.vue"),
+    component: () => import("./views/ConvertPage.vue"),
   },
   {
-    path: "/image_resize",
+    path: "/resize",
     name: "ImageResize",
-    component: () => import("./views/ImageResizePage.vue"),
+    component: () => import("./views/ResizePage.vue"),
   },
   {
     path: "/image_blur",
     name: "ImageBlur",
-    component: () => import("./views/ImageBlurPage.vue"),
+    component: () => import("./views/BlurPage.vue"),
   },
   {
     path: "/canny_edge_detection",
     name: "CannyEdgeDetection",
-    component: () => import("./views/ImageCannyEdgePage.vue"),
+    component: () => import("./views/CannyEdgePage.vue"),
+  },
+  {
+    path: "/thresholding",
+    name: "Thresholding",
+    component: () => import("./views/ThresholdingPage.vue"),
   },
 ];
 
